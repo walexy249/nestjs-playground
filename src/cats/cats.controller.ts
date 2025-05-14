@@ -11,12 +11,14 @@ import {
   HttpStatus,
   Res,
 } from '@nestjs/common';
-import { Request } from 'express';
-import { CreateCatDto } from './create-cat.dto';
-import { Response } from 'express';
+// import { Request } from 'express';
+import { CreateCatDto } from './dto/create-cat.dto';
+// import { Response } from 'express';
+import { CatsService } from './cats.service';
 
 @Controller('cats')
 export class CatController {
+  constructor(private catService: CatsService) {}
   //   @Get('abcd/*')
   //   findAll(@Req() req: Request): string {
   //     return 'This action returns all cats';
@@ -34,21 +36,24 @@ export class CatController {
   //     return `This returns cat with age: ${age} and breed: ${breed}`;
   //   }
 
+  //   @Get()
+  //   findAll(@Res({ passthrough: true }) res: Response) {
+  //     res.status(209);
+  //     return 'yeah';
+  //   }
   //   @Post()
-  //   createCat(@Body() createCatDto: CreateCatDto) {
-  //     console.log('body', createCatDto);
-  //     return createCatDto;
+  //   create(@Res() res: Response) {
+  //     res.status(HttpStatus.CREATED).send();
   //   }
 
   @Get()
-  findAll(@Res({ passthrough: true }) res: Response) {
-    res.status(209);
-    return 'yeah';
+  findAll() {
+    return this.catService.findAll();
   }
 
   @Post()
-  create(@Res() res: Response) {
-    res.status(HttpStatus.CREATED).send();
+  createCat(@Body() createCatDto: CreateCatDto) {
+    this.catService.create(createCatDto);
   }
 
   //   @Get('docs')
