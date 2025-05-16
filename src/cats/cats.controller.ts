@@ -10,6 +10,7 @@ import {
   Body,
   HttpStatus,
   Res,
+  HttpException,
 } from '@nestjs/common';
 // import { Request } from 'express';
 import { CreateCatDto } from './dto/create-cat.dto';
@@ -48,7 +49,20 @@ export class CatController {
 
   @Get()
   findAll() {
-    return this.catService.findAll();
+    try {
+      this.catService.findAll();
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.FORBIDDEN,
+          error: 'This is a custom error message',
+        },
+        HttpStatus.FORBIDDEN,
+        {
+          cause: error,
+        },
+      );
+    }
   }
 
   @Post()
