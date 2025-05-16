@@ -12,4 +12,11 @@ export class CatsService {
   findAll(): Cat[] {
     return this.cats;
   }
+  findOne(id: number): Cat {
+    const cat = this.cats.find((el) => el.id === id);
+    if (!cat) {
+      throw new Error(`Cat with id ${id} not found`);
+    }
+    return cat;
+  }
 }

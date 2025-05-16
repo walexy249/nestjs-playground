@@ -11,6 +11,7 @@ import {
   HttpStatus,
   Res,
   HttpException,
+  ParseIntPipe,
 } from '@nestjs/common';
 // import { Request } from 'express';
 import { CreateCatDto } from './dto/create-cat.dto';
@@ -68,6 +69,24 @@ export class CatController {
   @Post()
   createCat(@Body() createCatDto: CreateCatDto) {
     this.catService.create(createCatDto);
+  }
+
+  @Get(':id')
+  find(@Param('id', ParseIntPipe) id: number) {
+    try {
+      return this.catService.findOne(id);
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: error.message,
+        },
+        HttpStatus.NOT_FOUND,
+        {
+          cause: error,
+        },
+      );
+    }
   }
 
   //   @Get('docs')
